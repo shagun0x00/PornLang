@@ -25,6 +25,18 @@ def get_main_code(list_of_instructions):
     return code
 
 
+def execute_instructions(instruction_list: list):
+    print(instruction_list)
+    for instruction in instruction_list:
+        instruction = instruction.replace("\n", "")
+
+        parsed_line_list = instruction.split(" ")
+        if parsed_line_list[0].lower() == "baby" and parsed_line_list[1].lower() == "say":
+            print(" ".join(parsed_line_list[2:]))
+        else:
+            pass
+
+
 def main():
     # print(get_main_code())
     arguments = sys.argv[1:]
@@ -38,7 +50,7 @@ def main():
         code = get_code(file_name=filename, list_format=True)
         if check_validity(code):
             main_code = get_main_code(code)
-            print(main_code)
+            execute_instructions(main_code)
 
     except:
         print("fuck")
