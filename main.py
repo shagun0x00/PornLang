@@ -1,6 +1,7 @@
 import os
 import sys
 
+STACK = []
 
 def get_code(file_name: str, list_format=False) -> str:
     with open(file_name, "r") as f:
@@ -21,18 +22,34 @@ def get_main_code(list_of_instructions):
     code = list_of_instructions
     code = list(code)
     code.remove("ah\n")
-    code.remove("ahhhhhhh")
+    try:
+        code.remove("ahhhhhhh")
+    except:
+        code.remove("ahhhhhhh\n")
     return code
 
 
+
 def execute_instructions(instruction_list: list):
-    print(instruction_list)
-    for instruction in instruction_list:
+    #print(instruction_list)
+    for index, instruction in enumerate(instruction_list):
         instruction = instruction.replace("\n", "")
 
         parsed_line_list = instruction.split(" ")
         if parsed_line_list[0].lower() == "baby" and parsed_line_list[1].lower() == "say":
             print(" ".join(parsed_line_list[2:]))
+
+        elif parsed_line_list[0].lower() == "take" and parsed_line_list[2] == "baby":
+            value = parsed_line_list[1]
+            STACK.append(value)
+            #print(STACK)
+        elif parsed_line_list[0].lower() == "give" and parsed_line_list[2] == "to" and parsed_line_list[3] == "me" and parsed_line_list[4] == "baby":
+            try:
+                value = STACK.pop()
+            except IndexError:
+                print(f"\033[91m;baby!! you didn't give me anything....\nat line {index+2}")
+                exit()
+            print(value)
         else:
             pass
 
@@ -45,15 +62,16 @@ def main():
             Usage: python main.py <filename.prn>
         """)
         return
-    try:
-        filename = arguments[0]
-        code = get_code(file_name=filename, list_format=True)
-        if check_validity(code):
-            main_code = get_main_code(code)
-            execute_instructions(main_code)
+    #try:
+    filename = arguments[0]
+    code = get_code(file_name=filename, list_format=True)
+    if check_validity(code):
+        #print(code)
+        main_code = get_main_code(code)
+        execute_instructions(main_code)
 
-    except:
-        print("fuck")
+    #except:
+    #    print("fuckbbkbkhh")
 
 
 if __name__ == "__main__":
