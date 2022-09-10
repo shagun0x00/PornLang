@@ -33,6 +33,7 @@ def get_main_code(list_of_instructions):
 def execute_instructions(instruction_list: list):
     #print(instruction_list)
     for index, instruction in enumerate(instruction_list):
+        instruction_counter = index+2
         instruction = instruction.replace("\n", "")
 
         parsed_line_list = instruction.split(" ")
@@ -47,31 +48,30 @@ def execute_instructions(instruction_list: list):
             try:
                 value = STACK.pop()
             except IndexError:
-                print(f"\033[91m;baby!! you didn't give me anything....\nat line {index+2}")
+                print(f"\033[91mbaby!! you didn't give me anything....\nat line {instruction_counter}")
                 exit()
             print(value)
         else:
-            pass
+            print("\033[91mbaby! i'm not understanding what are you saying.")
+            exit()
 
 
 def main():
-    # print(get_main_code())
     arguments = sys.argv[1:]
     if len(arguments) == 0:
         print("""
             Usage: python main.py <filename.prn>
         """)
         return
-    #try:
-    filename = arguments[0]
-    code = get_code(file_name=filename, list_format=True)
-    if check_validity(code):
-        #print(code)
-        main_code = get_main_code(code)
-        execute_instructions(main_code)
+    try:
+        filename = arguments[0]
+        code = get_code(file_name=filename, list_format=True)
+        if check_validity(code):
+            main_code = get_main_code(code)
+            execute_instructions(main_code)
 
-    #except:
-    #    print("fuckbbkbkhh")
+    except Exception as e:
+        print("fuckbbkbkhh", e)
 
 
 if __name__ == "__main__":
